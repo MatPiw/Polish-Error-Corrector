@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class SentenceSplitter {
     //private static String pattern = "([\\.\\s,\\?!\\(\\)\\[\\]<>/]?\\s)";
-    private static String pattern = "[^\\p{LD}]+";  //pozbywa sie calej interpunkcji ze zdania
+    private static String pattern = "[^\\p{L}]+";  //pozbywa sie calej interpunkcji i liczb ze zdania
 
     public static List<String> split(String line) {
         return Arrays.asList(line.split(pattern));
