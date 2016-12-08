@@ -13,4 +13,8 @@ public class SentenceSplitter {
     public static List<String> split(String line) {
         return Arrays.asList(line.split(pattern));
     }
+
+    public static List<String> split(String line, String customPattern) {
+        return Arrays.asList(line.split(customPattern));
+    }
 }

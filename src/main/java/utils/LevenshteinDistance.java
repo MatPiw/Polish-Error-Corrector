@@ -3,6 +3,8 @@ package utils;
 /**
  * taken from wikibooks
  */
+
+//not used
 public class LevenshteinDistance {
 
     public static int levenshteinDistance (CharSequence lhs, CharSequence rhs) {
