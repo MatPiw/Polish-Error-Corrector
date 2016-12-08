@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CorrectorView">
+  <center>
+    <Pane prefHeight="200.0" prefWidth="200.0">
+      <children>
+        <TextArea fx:id="inputText" layoutX="14.0" layoutY="14.0" prefHeight="270.0" prefWidth="650.0" wrapText="true" />
+            <ScrollPane layoutX="14.0" layoutY="316.0" prefHeight="270.0" prefWidth="650.0">
+               <content>
+                  <TextFlow fx:id="outputTextFlow" prefHeight="270.0" prefWidth="630.0" />
+               </content>
+            </ScrollPane>
+            <Button fx:id="analyzeTextButton" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="Sprawdź tekst" />
+      </children>
+    </Pane>
+  </center>
+</BorderPane>

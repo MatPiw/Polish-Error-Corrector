@@ -11,9 +11,9 @@ public class Example {
         Scanner scanner = new Scanner(System.in);
         //String sentence = "to, jest przykładowe zdanie, które przetwarzam.\nZadałeś mi pytnanie? Nie odpowiem, lel. nie ogarniam sprawy! xD... (bo ja to ogólnie taki nieogar jestem)";
         //String sentence = "Tak jak ktos napisal napisal kocykiem nie przykrywam dziecka na gole cialo ,w lato pieluszka flanelowa a w zimie spiwor z owczej welny. kocyk służył nam do wozka na jesieni , a teraz do zabawy na dworze. nie szkoda mi go rozlozyc na trawie czy balkonie. znalesc żeka";
-        //String sentence = scanner.nextLine();
+        String sentence = scanner.nextLine();
 
-        //*odznaczyc jak chcesz pobrac content ze stronek
+        /*odznaczyc jak chcesz pobrac content ze stronek
         List<String> content = getContent();
         content = removeHtmlTags(content);
         try {
@@ -24,7 +24,7 @@ public class Example {
         //*/
 
         //rozszerzyc dla wszystkich elem. z listy
-        List<String> allWords = SentenceSplitter.split(content.get(0));
+        List<String> allWords = SentenceSplitter.split(sentence);
         Map<String, List<String>>potentialErrors = new HashMap<>();
 
         for (String w : allWords) {
