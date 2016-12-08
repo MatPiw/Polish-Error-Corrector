@@ -10,17 +10,18 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CorrectorView">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CorrectorView">
   <center>
     <Pane prefHeight="200.0" prefWidth="200.0">
       <children>
-        <TextArea fx:id="inputText" layoutX="14.0" layoutY="14.0" prefHeight="270.0" prefWidth="650.0" wrapText="true" />
+        <TextArea fx:id="inputText" layoutX="14.0" layoutY="14.0" prefHeight="270.0" prefWidth="650.0" promptText="Wpisz tekst..." wrapText="true" />
             <ScrollPane layoutX="14.0" layoutY="316.0" prefHeight="270.0" prefWidth="650.0">
                <content>
                   <TextFlow fx:id="outputTextFlow" prefHeight="270.0" prefWidth="630.0" />
                </content>
             </ScrollPane>
             <Button fx:id="analyzeTextButton" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="Sprawdź tekst" />
+            <ComboBox fx:id="suggestionsBox" disable="true" layoutX="514.0" layoutY="288.0" prefWidth="150.0" promptText="Sugestie słów..." />
       </children>
     </Pane>
   </center>
