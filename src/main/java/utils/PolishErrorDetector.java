@@ -6,6 +6,7 @@ import morfologik.stemming.polish.PolishStemmer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PolishErrorDetector {
     private static final int MAX_DISTANCE = 1;
@@ -25,5 +26,9 @@ public class PolishErrorDetector {
 
     public static List<String> getWordSuggestions(String word) {
         return speller.findReplacements(word);
+    }
+
+    public static boolean isNumeric(String word) {
+        return Pattern.matches("\\d+", word);
     }
 }

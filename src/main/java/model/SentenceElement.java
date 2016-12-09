@@ -14,21 +14,14 @@ public class SentenceElement {
     private String suffix;
 
     private boolean potentialError;
-    private List<String> wordSuggestions;
-    private final Pattern pattern;
+    //zero or more special characters, then one or more letters/digits, then again zero or more special characters
+    public static final Pattern wordPattern = Pattern.compile("([^\\p{javaAlphabetic}\\p{javaDigit}]*)([\\p{javaAlphabetic}\\p{javaDigit}]+)([^\\p{javaAlphabetic}\\p{javaDigit}]*)");
+    //pattern = Pattern.compile("^([^a-zA-Z0-9¹æê³ñóœŸ¿¥ÆÊ£ÑÓŒ¯]*)([a-zA-Z0-9¹æê³ñóœŸ¿¥ÆÊ£ÑÓŒ¯]+)([^a-zA-Z0-9¹æê³ñóœŸ¿¥ÆÊ£ÑÓŒ¯]*)$");
 
-    public SentenceElement(String word) {
-        //zero or more special characters, then one or more letters/digits, then again zero or more special characters
-        pattern = Pattern.compile("([^\\p{LD}]*)([\\p{LD}]+)([^\\p{LD}]*)");
-        Matcher matcher = pattern.matcher(word);
-        matcher.matches();
-        try {
-            this.prefix = matcher.group(1);
-            this.word = matcher.group(2);
-            this.suffix = matcher.group(3);
-        } catch (IllegalStateException e) {
-            System.out.println(word + " ???");
-        }
+    public SentenceElement(String prefix, String word, String suffix) {
+        this.prefix = prefix;
+        this.word = word;
+        this.suffix = suffix;
         potentialError = false;
 
     }
@@ -39,14 +32,6 @@ public class SentenceElement {
 
     public void setPotentialError(boolean potentialError) {
         this.potentialError = potentialError;
-    }
-
-    public List<String> getWordSuggestions() {
-        return wordSuggestions;
-    }
-
-    public void setWordSuggestions(List<String> wordSuggestions) {
-        this.wordSuggestions = wordSuggestions;
     }
 
     public String getWord() {

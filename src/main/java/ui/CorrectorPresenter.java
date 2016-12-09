@@ -8,6 +8,7 @@ import model.SentenceElement;
 import utils.PolishErrorDetector;
 import utils.SentenceSplitter;
 import java.util.*;
+import java.util.regex.Matcher;
 
 
 public class CorrectorPresenter {
@@ -39,13 +40,19 @@ public class CorrectorPresenter {
         outputControls = new ArrayList<>();
         inputText = input;
         outputArea.getChildren().clear();
-        splittedSentence = SentenceSplitter.split(input);
-        splittedSentence.forEach(w -> allWords.add(new SentenceElement(w)));
+        splittedSentence = SentenceSplitter.split(input, " ");
+        splittedSentence.forEach(w -> {
+            Matcher m = SentenceElement.wordPattern.matcher(w);
+            if(m.matches()) {
+                allWords.add(new SentenceElement(m.group(1), m.group(2), m.group(3)));
+            }
+
+        });
 
         Thread errorLooker = new Thread() {
             @Override
             public void run() {
-                potentialErrors = lookForErrors(splittedSentence);
+                potentialErrors = lookForErrors(allWords);
             }
         };
         errorLooker.start();
@@ -55,11 +62,8 @@ public class CorrectorPresenter {
             e.printStackTrace();
         }
         System.out.println("Zakończono wyszukiwanie błędów. Znalezionych błędów: " + potentialErrors.size());
-        /*for (String w : potentialErrors.keySet()) {
-            System.out.println(w + " - " + potentialErrors.get(w));
-        }*/
-        //tu się zajeżdża przy dłuższych tekstach!
 
+        //tu się zajeżdża przy dłuższych tekstach!
         if (outputControls.size() < 20)
             displayOutput(outputArea);
         else
@@ -67,14 +71,13 @@ public class CorrectorPresenter {
 
     }
 
-    private Map<String, List<String>> lookForErrors(List<String> words) {
+    private Map<String, List<String>> lookForErrors(List<SentenceElement> words) {
         Map<String, List<String>>potentialErrors = new HashMap<>();
-        words.forEach(w -> {
-            //String w = element.getWord();
-            if (!PolishErrorDetector.isWordInDictionary(w)) {
+        words.forEach(element -> {
+            String w = element.getWord();
+            if (!PolishErrorDetector.isWordInDictionary(w) && !PolishErrorDetector.isNumeric(w)) {
                 potentialErrors.put(w, PolishErrorDetector.getWordSuggestions(w));
-                //element.setPotentialError(true);
-                //element.setWordSuggestions(PolishErrorDetector.getWordSuggestions(w));
+                element.setPotentialError(true);
                 System.out.print("Potencjalny błąd: " + w);
                 System.out.println(", sugestie: " + potentialErrors.get(w).size());
             }
@@ -100,7 +103,10 @@ public class CorrectorPresenter {
         if (nevValue != null) {
             addWordSuggestion(nevValue);
             outputControls.remove(wordToReplaceIndex);
-            makeRawTextControl(nevValue, wordToReplaceIndex, Color.BLUE);
+            //search for wordToReplace in SentenceElements list
+            SentenceElement element = allWords.get(wordToReplaceIndex);
+            element.setWord(nevValue);
+            makeRawTextControl(element, wordToReplaceIndex, Color.BLUE);
             updateOutput();
             view.getSuggestionsBox().setDisable(true);
             view.getReplaceButton().setDisable(true);
@@ -121,7 +127,9 @@ public class CorrectorPresenter {
 
             for (int ind : indexes) {
                 outputControls.remove(ind);
-                makeRawTextControl(nevValue, ind, Color.BLUE);
+                SentenceElement element = allWords.get(wordToReplaceIndex);
+                element.setWord(nevValue);
+                makeRawTextControl(element, ind, Color.BLUE);
             }
             updateOutput();
             view.getSuggestionsBox().setDisable(true);
@@ -159,7 +167,20 @@ public class CorrectorPresenter {
 
     private void generateControlsForOutput() {
         System.out.println("Rozpoczęto tworzenie kontrolek...");
-        for (String w : splittedSentence) {
+        allWords.forEach(element -> {
+            String w = element.getWord();
+            if (potentialErrors.containsKey(w)) {
+                if (potentialErrors.get(w).size() != 1)
+                    makeHyperlink(element);
+                else {
+                    element.setWord(potentialErrors.get(w).get(0));
+                    makeRawTextControl(element, Color.GREEN);
+                }
+            } else
+                makeRawTextControl(element, Color.BLACK);
+        });
+
+        /*for (String w : splittedSentence) {
             if (potentialErrors.containsKey(w)) {
                 if (potentialErrors.get(w).size() != 1)
                     makeHyperlink(w);
@@ -167,15 +188,15 @@ public class CorrectorPresenter {
                     makeRawTextControl(potentialErrors.get(w).get(0), Color.GREEN);
             } else
                 makeRawTextControl(w, Color.BLACK);
-        }
+        }*/
         System.out.println("Zakończono tworzenie kontrolek.");
     }
 
 
 //generate Text or Hyperlink control
-    private void makeRawTextControl(String text, Color color) {
+    private void makeRawTextControl(SentenceElement text, Color color) {
         //Text controlText = new Text(text);
-        Label controlText = new Label(text);
+        Label controlText = new Label(text.toString());
         controlText.setPadding(new Insets(1));
         controlText.setTextFill(color);
         outputControls.add(controlText);
@@ -183,9 +204,9 @@ public class CorrectorPresenter {
         System.out.println("Stworzono kontrolkę Text o wartości " + text);
     }
 
-    private void makeRawTextControl(String text, int index, Color color) {
+    private void makeRawTextControl(SentenceElement text, int index, Color color) {
         //Text controlText = new Text(text);
-        Label controlText = new Label(text);
+        Label controlText = new Label(text.toString());
         controlText.setPadding(new Insets(1));
         controlText.setTextFill(color);
         outputControls.add(index, controlText);
@@ -194,12 +215,22 @@ public class CorrectorPresenter {
     }
 
 
-    private void makeHyperlink(String text) {
-        Hyperlink errorLink = new Hyperlink(text);
+    private void makeHyperlink(SentenceElement text) {
+        Hyperlink errorLink = new Hyperlink(text.getWord());
         errorLink.setOnMouseClicked(event -> displaySuggestions(errorLink));
         errorLink.setTextFill(Color.RED);
         outputControls.add(errorLink);
         //outputPane.getChildren().add(errorLink);
         System.out.println("Stworzono kontrolkę Hyperlink o wartości " + text);
+    }
+
+    private SentenceElement searchforElements(String word) {
+        SentenceElement result = null;
+        for (SentenceElement element : allWords) {
+            if (element.equals(word)) {
+                result = element;
+            }
+        }
+        return result;
     }
 }
