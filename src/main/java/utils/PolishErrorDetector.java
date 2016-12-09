@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PolishErrorDetector {
+    private static final int MAX_DISTANCE = 1;
     private static PolishStemmer stemmer = new PolishStemmer();
-    private static Speller speller = new Speller(stemmer.getDictionary());
+    private static Speller speller = new Speller(stemmer.getDictionary(), MAX_DISTANCE);
 
     public static boolean isWordInDictionary(String word) {
         return !stemmer.lookup(word.toLowerCase()).isEmpty();

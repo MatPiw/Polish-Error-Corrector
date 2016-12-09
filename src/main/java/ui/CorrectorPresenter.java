@@ -19,13 +19,20 @@ public class CorrectorPresenter {
     private List<String> allWords;
     private Map<String, List<String>> potentialErrors;
 
+    //used only for identifying word in text to replace (when choosing suggestions)
+    private String wordToReplace;
+    private String inputText;
+
     public CorrectorPresenter(CorrectorView view) {
+        wordToReplace = "";
+        inputText = "";
         potentialErrors = new HashMap<>();
         this.view = view;
         alert = new Alert(Alert.AlertType.CONFIRMATION, "Klikłeś xD", ButtonType.OK);
     }
 
     public void produceOutput(String input, TextFlow outputArea) {
+        inputText = input;
         outputArea.getChildren().clear();
         allWords = SentenceSplitter.split(input);
         synchronized(potentialErrors) {
@@ -35,6 +42,8 @@ public class CorrectorPresenter {
             System.out.println(w + " - " + potentialErrors.get(w));
         }*/
 
+
+        //tu się zajeżdża przy dłuższych tekstach!
         //*
         //System.out.println("Poprawiony tekst: ");
         synchronized(allWords) {
@@ -48,31 +57,41 @@ public class CorrectorPresenter {
         //*/
     }
 
-    public void writeRawText(String text, TextFlow outputPane) {
+
+    //gets old value and input text from itself (wordToReplace field in class)
+    public void replaceText(String nevValue) {
+        String outputText = inputText.replaceAll(wordToReplace, nevValue);
+        inputText = outputText;
+        writeRawText(outputText, view.getOutputTextFlow());
+    }
+
+    private void writeRawText(String text, TextFlow outputPane) {
         Label controlText = new Label(text);
         controlText.setPadding(new Insets(2));
         outputPane.getChildren().add(controlText);
     }
 
-    public void writeHyperText(String text, TextFlow outputPane) {
+    private void writeHyperText(String text, TextFlow outputPane) {
         Hyperlink errorLink = new Hyperlink(text);
-        errorLink.setOnMouseClicked(event -> displaySuggestions(errorLink.getText()));
+        errorLink.setOnMouseClicked(event -> displaySuggestions(errorLink));
         outputPane.getChildren().add(errorLink);
     }
 
-    private void displaySuggestions(String text) {
+    private void displaySuggestions(Hyperlink errorLink) {
+        wordToReplace = errorLink.getText();
         ComboBox<String> suggestionsBox = view.getSuggestionsBox();
         suggestionsBox.getItems().clear();
         suggestionsBox.setDisable(false);
-        suggestionsBox.getItems().addAll(potentialErrors.get(text));
-        suggestionsBox.getSelectionModel().selectedItemProperty()
+        suggestionsBox.getItems().addAll(potentialErrors.get(errorLink.getText()));
+        /*suggestionsBox.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<String>() {
                     public void changed(ObservableValue<? extends String> observable,
                                         String oldValue, String newValue) {
-                        System.out.println("Value is: "+newValue);
+                        System.out.println("Zamieniono " + errorLink.getText() + " na " + newValue);
+                        errorLink.setText(newValue);
+                        suggestionsBox.setDisable(true);
                     }
-                });
-        //suggestionsBox.getSelectionModel().select();
+                });//*/
     }
 
     private Map<String, List<String>> lookForErrors(List<String> words) {
@@ -85,4 +104,6 @@ public class CorrectorPresenter {
         }
         return potentialErrors;
     }
+
+
 }

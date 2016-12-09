@@ -22,6 +22,10 @@ public class CorrectorView extends Application {
     private Button analyzeTextButton;
     @FXML
     private ComboBox<String> suggestionsBox;
+    @FXML
+    private Button replaceButton;
+
+    private String outputText;
 
 
     private CorrectorPresenter presenter;
@@ -44,11 +48,14 @@ public class CorrectorView extends Application {
 
                 outputTextFlow = (TextFlow) root.lookup("#outputTextFlow");
                 inputText = (TextArea) root.lookup("#inputText");
-                inputText.setText("Tak jak ktos napisal napisal kocykiem nie przykrywam dziecka na gole cialo ,w lato pieluszka flanelowa a w zimie spiwor z owczej welny. kocyk służył nam do wozka na jesieni , a teraz do zabawy na dworze. nie szkoda mi go rozlozyc na trawie czy balkonie. znalesc żeka");
+                inputText.setText("Wiem rze ten tegst jesd pelen błendów ortograficznyh ale jest on tylko pżykładem dziauania programu.");
                 suggestionsBox = (ComboBox<String>) root.lookup("#suggestionsBox");
 
                 analyzeTextButton = (Button) root.lookup("#analyzeTextButton");
                 analyzeTextButton.setOnMouseClicked(event -> presenter.produceOutput(inputText.getText(), outputTextFlow));
+
+                replaceButton = (Button) root.lookup("#replaceButton");
+                replaceButton.setOnMouseClicked(event -> presenter.replaceText(suggestionsBox.getValue()));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -57,5 +64,9 @@ public class CorrectorView extends Application {
 
     public ComboBox<String> getSuggestionsBox() {
         return suggestionsBox;
+    }
+
+    public TextFlow getOutputTextFlow() {
+        return outputTextFlow;
     }
 }

@@ -21,7 +21,8 @@
                </content>
             </ScrollPane>
             <Button fx:id="analyzeTextButton" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="Sprawdź tekst" />
-            <ComboBox fx:id="suggestionsBox" disable="true" layoutX="514.0" layoutY="288.0" prefWidth="150.0" promptText="Sugestie słów..." />
+            <ComboBox fx:id="suggestionsBox" disable="true" layoutX="428.0" layoutY="288.0" prefWidth="150.0" promptText="Sugestie słów..." />
+            <Button fx:id="replaceButton" layoutX="588.0" layoutY="288.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Zamień" />
       </children>
     </Pane>
   </center>
