@@ -24,6 +24,10 @@ public class CorrectorView extends Application {
     private ComboBox<String> suggestionsBox;
     @FXML
     private Button replaceButton;
+    @FXML
+    private Button replaceAllButton;
+    @FXML
+    private Button dontReplaceButton;
 
     private String outputText;
 
@@ -57,6 +61,12 @@ public class CorrectorView extends Application {
                 replaceButton = (Button) root.lookup("#replaceButton");
                 replaceButton.setOnMouseClicked(event -> presenter.replaceText(suggestionsBox.getValue()));
 
+                replaceAllButton = (Button) root.lookup("#replaceAllButton");
+                replaceAllButton.setOnMouseClicked(event -> presenter.replaceAll(suggestionsBox.getValue()));
+
+                dontReplaceButton = (Button) root.lookup("#dontReplaceButton");
+                dontReplaceButton.setOnMouseClicked(event -> presenter.ignore());
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -68,5 +78,17 @@ public class CorrectorView extends Application {
 
     public TextFlow getOutputTextFlow() {
         return outputTextFlow;
+    }
+
+    public Button getReplaceButton() {
+        return replaceButton;
+    }
+
+    public Button getReplaceAllButton() {
+        return replaceAllButton;
+    }
+
+    public Button getDontReplaceButton() {
+        return dontReplaceButton;
     }
 }
