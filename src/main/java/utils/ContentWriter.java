@@ -16,6 +16,14 @@ public class ContentWriter {
         this.filename = filename;
     }
 
+    public ContentWriter(File file) throws FileNotFoundException {
+        sourceFile = file;
+        writer = new BufferedWriter(
+                new OutputStreamWriter(
+                        new FileOutputStream(sourceFile)));
+        this.filename = file.getName();
+    }
+
     public void writeLine(String text) throws IOException {
         writer.write(text);
         writer.newLine();

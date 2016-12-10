@@ -1,13 +1,24 @@
 package ui;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import model.SentenceElement;
+import utils.ContentWriter;
 import utils.PolishErrorDetector;
 import utils.SentenceSplitter;
-import java.util.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 
@@ -232,5 +243,15 @@ public class CorrectorPresenter {
             }
         }
         return result;
+    }
+
+    public void export(File file) throws IOException {
+        ContentWriter writer = new ContentWriter(file);
+        String output = "";
+        for (SentenceElement w : allWords) {
+            output = output + w + " ";
+        }
+        writer.writeLine(output);
+        writer.close();
     }
 }

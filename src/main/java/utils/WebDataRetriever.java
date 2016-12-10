@@ -14,16 +14,21 @@ public class WebDataRetriever {
     private static URLConnection connection = null;
 
     private static String[] urls = {
-            "http://f.kafeteria.pl/temat/f4/przyklady-najgorszego-skapstwa-smieszne-albo-zenujace-sytuacje-ze-sknerami-p_4820467"
+            "http://f.kafeteria.pl/temat/f4/przyklady-najgorszego-skapstwa-smieszne-albo-zenujace-sytuacje-ze-sknerami-p_4820467",
+            "http://f.kafeteria.pl/temat/f1/hce-zalorzyc-mondry-temat-p_3197853",
+            "http://f.kafeteria.pl/temat/f1/jak-namowic-meza-na-dziecko-p_3186435"
     };
+
+    private static int[] pageNumbers = {20,4,2};
 
 
     public static List<String> getContentFromUrls(){
         List<String> content = new ArrayList<>();
-        for (String url: urls) {
+        for (int index = 0; index < urls.length; index++) {
+            System.out.println("Link nr " + index);
             System.out.println("pobieranie...");
-            for (int i = 1; i <= 20; i++) {
-                content.add(getContentFromUrl(url + "/" + i));
+            for (int i = 1; i <= pageNumbers[index]; i++) {
+                content.add(getContentFromUrl(urls[index] + "/" + i));
                 System.out.println("pobrano stronę " + i);
             }
 
