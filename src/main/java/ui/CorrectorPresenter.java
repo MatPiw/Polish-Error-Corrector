@@ -13,7 +13,6 @@ import utils.PolishErrorDetector;
 import utils.SentenceSplitter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,38 +189,24 @@ public class CorrectorPresenter {
             } else
                 makeRawTextControl(element, Color.BLACK);
         });
-
-        /*for (String w : splittedSentence) {
-            if (potentialErrors.containsKey(w)) {
-                if (potentialErrors.get(w).size() != 1)
-                    makeHyperlink(w);
-                else
-                    makeRawTextControl(potentialErrors.get(w).get(0), Color.GREEN);
-            } else
-                makeRawTextControl(w, Color.BLACK);
-        }*/
         System.out.println("Zakończono tworzenie kontrolek.");
     }
 
 
 //generate Text or Hyperlink control
     private void makeRawTextControl(SentenceElement text, Color color) {
-        //Text controlText = new Text(text);
         Label controlText = new Label(text.toString());
         controlText.setPadding(new Insets(1));
         controlText.setTextFill(color);
         outputControls.add(controlText);
-        //outputPane.getChildren().add(controlText);
         System.out.println("Stworzono kontrolkę Text o wartości " + text);
     }
 
     private void makeRawTextControl(SentenceElement text, int index, Color color) {
-        //Text controlText = new Text(text);
         Label controlText = new Label(text.toString());
         controlText.setPadding(new Insets(1));
         controlText.setTextFill(color);
         outputControls.add(index, controlText);
-        //outputPane.getChildren().add(controlText);
         System.out.println("Stworzono kontrolkę Text o wartości " + text);
     }
 
@@ -231,18 +216,7 @@ public class CorrectorPresenter {
         errorLink.setOnMouseClicked(event -> displaySuggestions(errorLink));
         errorLink.setTextFill(Color.RED);
         outputControls.add(errorLink);
-        //outputPane.getChildren().add(errorLink);
         System.out.println("Stworzono kontrolkę Hyperlink o wartości " + text);
-    }
-
-    private SentenceElement searchforElements(String word) {
-        SentenceElement result = null;
-        for (SentenceElement element : allWords) {
-            if (element.equals(word)) {
-                result = element;
-            }
-        }
-        return result;
     }
 
     public void export(File file) throws IOException {

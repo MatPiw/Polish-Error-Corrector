@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SentenceElement {
@@ -16,7 +14,6 @@ public class SentenceElement {
     private boolean potentialError;
     //zero or more special characters, then one or more letters/digits, then again zero or more special characters
     public static final Pattern wordPattern = Pattern.compile("([^\\p{javaAlphabetic}\\p{javaDigit}]*)([\\p{javaAlphabetic}\\p{javaDigit}]+)([^\\p{javaAlphabetic}\\p{javaDigit}]*)");
-    //pattern = Pattern.compile("^([^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŻŹ]*)([a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŻŹ]+)([^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŻŹ]*)$");
 
     public SentenceElement(String prefix, String word, String suffix) {
         this.prefix = prefix;

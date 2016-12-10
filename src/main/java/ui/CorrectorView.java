@@ -9,10 +9,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.WebDataRetriever;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class CorrectorView extends Application {
@@ -37,7 +35,6 @@ public class CorrectorView extends Application {
     @FXML
     private Button exportButton;
 
-    private String outputText;
 
     private CorrectorPresenter presenter;
 
@@ -49,35 +46,9 @@ public class CorrectorView extends Application {
     public void start(Stage primaryStage) {
             try {
                 this.primaryStage = primaryStage;
-                root = FXMLLoader.load(getClass().getResource("/corrector.fxml"));
-                presenter = new CorrectorPresenter(this);
-                Scene scene = new Scene(root);
-
-                primaryStage.setScene( scene );
-                primaryStage.setResizable(false);
-                primaryStage.setTitle("Polski znajdywacz błędów v 0.2");
-                primaryStage.show();
-
+                setWindowProperties(primaryStage);
                 //WebDataRetriever.saveContentToFile("content.txt");
-                outputTextFlow = (TextFlow) root.lookup("#outputTextFlow");
-                inputText = (TextArea) root.lookup("#inputText");
-                inputText.setText("Wiem, rze ten tegst jesd pelen błendów ortograficznyh! ale jest on tylko pżykładem dziauania programu.");
-                suggestionsBox = (ComboBox<String>) root.lookup("#suggestionsBox");
-
-                analyzeTextButton = (Button) root.lookup("#analyzeTextButton");
-                analyzeTextButton.setOnMouseClicked(event -> presenter.produceOutput(inputText.getText(), outputTextFlow));
-
-                replaceButton = (Button) root.lookup("#replaceButton");
-                replaceButton.setOnMouseClicked(event -> presenter.replaceText(suggestionsBox.getValue()));
-
-                replaceAllButton = (Button) root.lookup("#replaceAllButton");
-                replaceAllButton.setOnMouseClicked(event -> presenter.replaceAll(suggestionsBox.getValue()));
-
-                dontReplaceButton = (Button) root.lookup("#dontReplaceButton");
-                dontReplaceButton.setOnMouseClicked(event -> presenter.ignore());
-
-                exportButton = (Button) root.lookup("#exportButton");
-                exportButton.setOnMouseClicked(event -> export());
+                initializeControls();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -102,6 +73,39 @@ public class CorrectorView extends Application {
 
     public Button getDontReplaceButton() {
         return dontReplaceButton;
+    }
+
+    private void setWindowProperties(Stage primaryStage) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("/corrector.fxml"));
+        presenter = new CorrectorPresenter(this);
+        Scene scene = new Scene(root);
+
+        primaryStage.setScene( scene );
+        primaryStage.setResizable(false);
+        primaryStage.setTitle("Polski znajdywacz błędów v 0.2");
+        primaryStage.show();
+    }
+
+    private void initializeControls() {
+        outputTextFlow = (TextFlow) root.lookup("#outputTextFlow");
+        inputText = (TextArea) root.lookup("#inputText");
+        inputText.setText("Wiem, rze ten tegst jesd pelen błendów ortograficznyh! ale jest on tylko pżykładem dziauania programu.");
+        suggestionsBox = (ComboBox<String>) root.lookup("#suggestionsBox");
+
+        analyzeTextButton = (Button) root.lookup("#analyzeTextButton");
+        analyzeTextButton.setOnMouseClicked(event -> presenter.produceOutput(inputText.getText(), outputTextFlow));
+
+        replaceButton = (Button) root.lookup("#replaceButton");
+        replaceButton.setOnMouseClicked(event -> presenter.replaceText(suggestionsBox.getValue()));
+
+        replaceAllButton = (Button) root.lookup("#replaceAllButton");
+        replaceAllButton.setOnMouseClicked(event -> presenter.replaceAll(suggestionsBox.getValue()));
+
+        dontReplaceButton = (Button) root.lookup("#dontReplaceButton");
+        dontReplaceButton.setOnMouseClicked(event -> presenter.ignore());
+
+        exportButton = (Button) root.lookup("#exportButton");
+        exportButton.setOnMouseClicked(event -> export());
     }
 
     private void export() {
